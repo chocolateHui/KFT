@@ -12,6 +12,7 @@ module.exports = {
             },
             '/ms':{
                 target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
+                // target: 'https://www.easy-mock.com/mock/5c6a2213e98b382e68fd1b53',
                 changeOrigin: true
             }
         }

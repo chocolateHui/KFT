@@ -8,17 +8,20 @@
         <div class="container">
             <div class="handle-box">
                 <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10">
+                <el-select v-model="select_cate" placeholder="筛选角色" class="handle-select mr10">
                     <el-option key="1" label="广东省" value="广东省"></el-option>
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
                 </el-select>
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
             </div>
-            <el-table :data="data" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table 
+            :data="data" border class="table"
+            ref="multipleTable"
+            @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="role" label="角色" width="150"></el-table-column>
-                <el-table-column prop="code" label="编码" width="120"></el-table-column>
+                <el-table-column prop="role" label="角色"></el-table-column>
+                <el-table-column prop="code" label="编码"></el-table-column>
                 <el-table-column prop="menu" label="菜单权限"></el-table-column>
                 <el-table-column prop="function" label="功能权限"></el-table-column>
                 <el-table-column prop="report" label="报表权限"></el-table-column>
@@ -82,6 +85,10 @@
                 is_search: false,
                 editVisible: false,
                 delVisible: false,
+                rowStyle: {
+                    'color': 'blue',
+                    'height': '80px',
+                },
                 form: {
                     name: '',
                     date: '',
@@ -98,15 +105,15 @@
                 return this.tableData.filter((d) => {
                     let is_del = false;
                     for (let i = 0; i < this.del_list.length; i++) {
-                        if (d.name === this.del_list[i].name) {
+                        if (d.code === this.del_list[i].code) {
                             is_del = true;
                             break;
                         }
                     }
                     if (!is_del) {
-                        if (d.address.indexOf(this.select_cate) > -1 &&
-                            (d.name.indexOf(this.select_word) > -1 ||
-                                d.address.indexOf(this.select_word) > -1)
+                        if (d.code.indexOf(this.select_cate) > -1 &&
+                            (d.role.indexOf(this.select_word) > -1 ||
+                                d.code.indexOf(this.select_word) > -1)
                         ) {
                             return d;
                         }
@@ -123,9 +130,10 @@
             // 获取 easy-mock 的模拟数据
             getData() {
                 // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
-                // if (process.env.NODE_ENV === 'development') {
-                //     this.url = '/ms/table/list';
-                // };
+                if (process.env.NODE_ENV === 'development') {
+                    // this.url = '/ms/table/list';
+                    this.url = 'https://www.easy-mock.com/mock/5c6a2213e98b382e68fd1b53/kft/rolelist';
+                };
                 this.$axios.post(this.url, {
                     page: this.cur_page
                 }).then((res) => {
